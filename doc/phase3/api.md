@@ -1,0 +1,1 @@
+https://app.swaggerhub.com/apis-docs/CookieHour/cookie-hour_api_p3/1.0.0

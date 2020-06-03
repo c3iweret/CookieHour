@@ -1,0 +1,98 @@
+body {
+    font-family: Helvetica;
+    text-align: center;
+    /* position: fixed; */
+    top: 50%;
+    left: 50%;
+    /* -webkit-transform: translate(-50%, -50%); */
+    /* -ms-transform: translate(-50%, -50%); */
+    /* transform: translate(-50%, -50%); */
+}
+
+.App {
+    margin-top: 50px;
+}
+
+.login {
+    display: inline-grid;
+}
+
+.loginText {
+  font-family: Helvetica;
+  font-size: 20px;
+}
+
+.logo {
+    width: 240px;
+    font-size: 46px;
+    margin-bottom: 50px;
+}
+
+.signupForm {
+    width: 220px;
+    padding: 15px;
+    font-size: 12px;
+}
+
+.signupButton {
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: hand;
+    padding-left: 3px;
+}
+
+.center {
+    text-align: center;
+    margin: auto;
+    width: 70px;
+}
+
+.index-button {
+    background-color:#3094f1;
+    color: white;
+    margin: 8px;
+    padding: 10px;
+    width: 270px;
+    height: 35px;
+    border-radius: 5px;
+    border: none;
+}
+
+.user-button {
+    background: #3094f1;
+}
+
+.back-button {
+    font-size: 18px;
+    background: #3094f1;
+}
+
+.index-button:hover {
+    background: #287fcf;
+    cursor: pointer;
+}
+
+.login-button {
+    font-size: 12px;
+    background: #fe503e;
+}
+
+.login-button:hover {
+    background: #ff1100;
+    cursor: pointer;
+}
+
+.login-field {
+    margin: 8px;
+    padding: 10px;
+    width: 270px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(128,128,128, 0.2);
+}
+
+.signup {
+    display: none;
+}

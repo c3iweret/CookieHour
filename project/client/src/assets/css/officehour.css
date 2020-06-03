@@ -1,0 +1,63 @@
+.card-stats .ohInfoTime {
+  font-size: 2em;
+  text-align: center !important; 
+  color: #6d6d6d;
+  padding-top: 50px;
+}
+
+h2 {
+  width: 100%; 
+  text-align: center; 
+  border-bottom: 1px solid rgb(58, 58, 58); 
+  line-height: 0.1em;
+  margin: 10px 0 20px; 
+  font-size: 20px;
+  font-weight: 300;
+} 
+
+h2 span { 
+  background:#f7f7f8; 
+  padding:0 10px; 
+  z-index: 99999;
+}
+
+.content p {
+  color: #6d6d6d;
+}
+
+.ohInfoTime, .duration {
+  /* min-height: 30px; */
+  padding-bottom: 20px;
+}
+
+.meetingRow, .meetingRowTaken {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.meetingRow:hover {
+  background-color: #e0dfdf;
+  cursor: pointer; 
+  color: black;
+}
+
+.meetingTime {
+  color: #8f9294;
+}
+
+.meetingName {
+  color: #505050;
+}
+
+.bookingRender {
+  padding-top: 20px;
+}
+
+.bigArea {
+  width: 98%;
+}
+
+.agenda {
+  height: 80px;
+}

@@ -1,0 +1,75 @@
+
+.modal-content {
+	background-color: #ffffffed;
+	margin-top: 25%;
+}
+
+.modalRow {
+	margin-bottom: 10px;
+}
+
+.label {
+	display: block;
+	color: #6d6969;
+	text-align: left;
+}
+
+.overlay-field {
+	width: 100%;
+}
+
+.upload {
+	width: 200px;
+}
+
+.overlayFormButton {
+	float: left;
+	clear: both;
+	background-color: #87cb16 !important;
+	color: white !important;
+	border-color: #87cb16 !important;
+	padding: 5px;
+  	width: 150px;
+}
+
+.closeButton {
+	background-color: #ff4a55 !important;
+	color: white !important;
+	border-color: #ff4a55 !important;
+	padding: 5px;
+  	width: 150px;
+}
+
+.meetingContent {
+	height: 100px;
+}
+
+.deleteButton {
+	background-color: #ff4a55 !important;
+	color: white !important;
+	border-color: #ff4a55 !important;
+	padding: 5px;
+  	width: 150px;
+}
+
+.export {
+	float: left;
+	background-color: #709ed8 !important;
+	color: white !important;
+	border-color: white !important;
+	font-size: 16px;
+	padding: 6px 12px !important;
+}
+
+/* .delCourse {
+	background-color: #fb7979;
+    color: white;
+    width: 33px !important;
+    height: 24px;
+    border-radius: 5px;
+    border: none;
+}
+
+.delCourse:hover {
+	background-color: #d66868;
+} */

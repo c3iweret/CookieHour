@@ -1,0 +1,26 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "babel-core": "^7.0.0-bridge.0",
+    "body-parser": "^1.18.3",
+    "bootstrap": "^4.3.1",
+    "express": "^4.16.4",
+    "react-bootstrap": "^1.0.0-beta.5"
+  },
+  "devDependencies": {
+    "concurrently": "3.5.1",
+    "sinon": "^7.2.7"
+  },
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "cd server && npm start",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "concurrently \"cd client && npm test a\" \"cd server && npm test\" "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

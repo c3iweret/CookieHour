@@ -1,0 +1,5 @@
+{
+  "server_port": "5000",
+  "mongo_db_address": "mongodb+srv://simon:simon@cluster0-kvcd5.gcp.mongodb.net/test",
+  "app_secret_hash_key": "k2jh34938hf9shedfosdikfa0s9fu023hfjk"
+}

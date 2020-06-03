@@ -1,0 +1,1423 @@
+{
+ "swagger": "2.0",
+ "info": {
+  "description": "API endpoints for CookieHour's implementation of the Office Hour server",
+  "version": "1.0.0",
+  "title": "CookieHour API",
+  "termsOfService": "http://swagger.io/terms/",
+  "contact": {
+   "email": "apiteam@swagger.io"
+  },
+  "license": {
+   "name": "Apache 2.0",
+   "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+  }
+ },
+ "host": "cookiehour.swagger.io",
+ "basePath": "/v2",
+ "tags": [
+  {
+   "name": "user",
+   "description": "Operations about user"
+  },
+  {
+   "name": "student",
+   "description": "Operations about student"
+  },
+  {
+   "name": "teacher",
+   "description": "Operations about teacher"
+  },
+  {
+   "name": "course",
+   "description": "Operations about course"
+  },
+  {
+   "name": "officehours",
+   "description": "Operations about office hours"
+  },
+  {
+   "name": "meeting",
+   "description": "Operations about meeting"
+  }
+ ],
+ "schemes": [
+  "https",
+  "http"
+ ],
+ "paths": {
+  "/user": {
+   "get": {
+    "tags": [
+     "user"
+    ],
+    "summary": "Gets the currently logged in profile of the user",
+    "description": "Returns the profile of the user, either 'student' or 'teacher'",
+    "operationId": "getUser",
+    "produces": [
+     "application/json"
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/User"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "404": {
+      "description": "User not logged in"
+     }
+    }
+   }
+  },
+  "/student/login": {
+   "post": {
+    "tags": [
+     "student"
+    ],
+    "summary": "Logs student into the system",
+    "description": "Creates a student session and returns the status of the call, information of the student, and the session token with expiry time",
+    "operationId": "loginStudent",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Credentials for student login",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/Login"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Speration",
+      "schema": {
+       "$ref": "#/definitions/LoginResponse"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "401": {
+      "description": "Invalid username/password supplied"
+     },
+     "403": {
+      "description": "User not authorized to perform the requested operation"
+     }
+    }
+   }
+  },
+  "/student/profile": {
+   "get": {
+    "tags": [
+     "student"
+    ],
+    "summary": "Gets the currently logged in student",
+    "operationId": "getStudent",
+    "produces": [
+     "application/json"
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/LoginData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "404": {
+      "description": "Student not logged in"
+     }
+    }
+   }
+  },
+  "/student/logout/{sessionId}": {
+   "delete": {
+    "tags": [
+     "student"
+    ],
+    "summary": "Logs-out the student out of the system",
+    "description": "Destroys the current student session",
+    "operationId": "logoutStudent",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "name": "sessionId",
+      "in": "path",
+      "description": "ID of the session to be logged out of",
+      "required": true,
+      "type": "string",
+      "minimum": 1
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successfully logged out"
+     },
+     "400": {
+      "description": "Invalid ID supplied"
+     },
+     "404": {
+      "description": "Session not found"
+     }
+    }
+   }
+  },
+  "/teacher/login": {
+   "post": {
+    "tags": [
+     "teacher"
+    ],
+    "summary": "Logs teacher into the system",
+    "description": "Creates a teacher session and returns the status of the call, information of the teacher, and the session token with expiry time",
+    "operationId": "loginTeacher",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Credentials for teacher login",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/Login"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/LoginResponse"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "401": {
+      "description": "Invalid username/password supplied"
+     },
+     "403": {
+      "description": "User not authorized to perform the requested operation"
+     }
+    }
+   }
+  },
+  "/teacher/profile": {
+   "get": {
+    "tags": [
+     "teacher"
+    ],
+    "summary": "Gets the current logged in teacher",
+    "operationId": "getTeacher",
+    "produces": [
+     "application/json"
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/LoginData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "404": {
+      "description": "Teacher not logged in"
+     }
+    }
+   }
+  },
+  "/teacher/logout/{sessionId}": {
+   "delete": {
+    "tags": [
+     "teacher"
+    ],
+    "summary": "Logs-out the teacher out of the system",
+    "description": "Destroys the current teacher session",
+    "operationId": "logoutTeacher",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "name": "sessionId",
+      "in": "path",
+      "description": "ID of the session to be logged out of",
+      "required": true,
+      "type": "string",
+      "minimum": 1
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successfully logged out"
+     },
+     "400": {
+      "description": "Invalid ID supplied"
+     },
+     "404": {
+      "description": "Session not found"
+     }
+    }
+   }
+  },
+  "/course/create": {
+   "post": {
+    "tags": [
+     "course"
+    ],
+    "summary": "Creates a class for the course",
+    "description": "Creates a section of the course with specified course name, course code, teacher, session (year & semester), and the students enrolled in the section",
+    "operationId": "createCourse",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for course create",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/CourseCreate"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/CourseData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "401": {
+      "description": "Invalid parameters supplied"
+     },
+     "403": {
+      "description": "User not authorized to perform the requested operation"
+     }
+    }
+   }
+  },
+  "/courses": {
+   "get": {
+    "tags": [
+     "course"
+    ],
+    "summary": "Get all the courses taught by the current logged-in teacher",
+    "operationId": "getCourses",
+    "produces": [
+     "application/json"
+    ],
+    "responses": {
+     "200": {
+      "description": "Successfully retrieved all courses",
+      "schema": {
+       "$ref": "#/definitions/CourseData"
+      }
+     },
+     "404": {
+      "description": "Teacher not signed in"
+     }
+    }
+   }
+  },
+  "/teacher/create-office-hours": {
+   "post": {
+    "tags": [
+     "officehours"
+    ],
+    "summary": "Creates an office hour time",
+    "description": "Creates an office hour session on a specified date and between two certain times, and specifying the length of each meeting",
+    "operationId": "createOH",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for office hour create",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/OHCreate"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/OHData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "403": {
+      "description": "User not authorized to perform the requested operation"
+     },
+     "404": {
+      "description": "Invalid parameters supplied"
+     }
+    }
+   }
+  },
+  "/teacher/get-office-hours": {
+   "get": {
+    "tags": [
+     "officehours"
+    ],
+    "summary": "Get all office hours with a given course code",
+    "operationId": "getOH",
+    "produces": [
+     "application/json"
+    ],
+    "responses": {
+     "200": {
+      "description": "Successfully retrieved the office hours",
+      "schema": {
+       "$ref": "#/definitions/OHData"
+      }
+     },
+     "404": {
+      "description": "Teacher not signed in"
+     }
+    }
+   }
+  },
+  "/teacher/delete-office-hours": {
+   "delete": {
+    "tags": [
+     "officehours"
+    ],
+    "summary": "Deletes the office hour block",
+    "description": "Removes all the students from any booked meetings in the office hour, and deletes it",
+    "operationId": "deleteOH",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for deleting office hour",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/deleteOH"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successfully deleted the OH and all its meetings"
+     },
+     "400": {
+      "description": "Bad request"
+     },
+     "404": {
+      "description": "The specified OH was not found"
+     }
+    }
+   }
+  },
+  "/meeting/create/student": {
+   "post": {
+    "tags": [
+     "meeting"
+    ],
+    "summary": "Creates a meeting for the logged in student",
+    "description": "Schedules a meeting time slot of the chosen course's office hours",
+    "operationId": "createMeeting",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for meeting create",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/MeetingCreate"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/MeetingData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "400": {
+      "description": "Bad Request"
+     },
+     "404": {
+      "description": "No such user - student"
+     }
+    }
+   }
+  },
+  "/meeting/get-meeting/{client}": {
+   "get": {
+    "tags": [
+     "meeting"
+    ],
+    "summary": "Gets all the meetings for given office hour block",
+    "operationId": "getMeeting",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "name": "client",
+      "in": "path",
+      "description": "Parameter for user type",
+      "required": true,
+      "type": "string"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/MeetingData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "400": {
+      "description": "Bad request"
+     },
+     "404": {
+      "description": "Meeting not found"
+     }
+    }
+   }
+  },
+  "/meeting/edit-agenda/student": {
+   "patch": {
+    "tags": [
+     "meeting"
+    ],
+    "summary": "Edits the agenda of the student for the given meeting",
+    "operationId": "editAgenda",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for agenda edit",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/AgendaEdit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/MeetingData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "400": {
+      "description": "Bad Request"
+     },
+     "404": {
+      "description": "No such meeting"
+     }
+    }
+   }
+  },
+  "/meeting/edit-comment/{client}": {
+   "patch": {
+    "tags": [
+     "meeting"
+    ],
+    "summary": "Edits comments made in a meeting",
+    "operationId": "editComment",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "name": "client",
+      "in": "path",
+      "description": "Parameter for user type",
+      "required": true,
+      "type": "string"
+     },
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for comment edit",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/CommentEdit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/MeetingData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "400": {
+      "description": "Bad Request"
+     },
+     "404": {
+      "description": "No such meeting"
+     }
+    }
+   }
+  },
+  "/meeting/edit-note/teacher": {
+   "patch": {
+    "tags": [
+     "meeting"
+    ],
+    "summary": "Edits notes made in a meeting",
+    "operationId": "editNote",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for note edit",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/NoteEdit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/MeetingData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "400": {
+      "description": "Bad Request"
+     },
+     "404": {
+      "description": "No such meeting"
+     }
+    }
+   }
+  },
+  "/meeting/reschedule-time": {
+   "patch": {
+    "tags": [
+     "meeting"
+    ],
+    "summary": "Reschedules the time of a meeting",
+    "operationId": "editTime",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for rescheduling meeting",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/TimeEdit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/MeetingData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "400": {
+      "description": "Bad Request"
+     },
+     "404": {
+      "description": "No such meeting"
+     }
+    }
+   }
+  },
+  "/meeting/reschedule-date": {
+   "patch": {
+    "tags": [
+     "meeting"
+    ],
+    "summary": "Reschedules the date of a meeting",
+    "operationId": "editDate",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for rescheduling meeting",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/DateEdit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Operation",
+      "schema": {
+       "$ref": "#/definitions/MeetingData"
+      },
+      "headers": {
+       "X-Rate-Limit": {
+        "type": "integer",
+        "format": "int32",
+        "description": "calls per hour allowed by the user"
+       },
+       "X-Expires-After": {
+        "type": "string",
+        "format": "date-time",
+        "description": "date in UTC when token expires"
+       }
+      }
+     },
+     "400": {
+      "description": "Bad Request"
+     },
+     "404": {
+      "description": "No such meeting"
+     }
+    }
+   }
+  },
+  "/meeting/delete": {
+   "delete": {
+    "tags": [
+     "meeting"
+    ],
+    "summary": "Unschedules the meeting and frees up the time slot in the office hours",
+    "operationId": "deleteMeeting",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "query",
+      "description": "Parameters for unscheduling the meeting",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/DateEdit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successfully unscheduled the meeting"
+     },
+     "400": {
+      "description": "Bad Request - invalid params"
+     },
+     "404": {
+      "description": "Meeting not found"
+     }
+    }
+   }
+  },
+  "/meeting/delete-note/teacher": {
+   "delete": {
+    "tags": [
+     "meeting"
+    ],
+    "summary": "Deletes a note in a meeting",
+    "operationId": "deleteNote",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for deleting a note in the meeting",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/DateEdit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successfully deleted the note"
+     },
+     "400": {
+      "description": "Bad Request - invalid params"
+     },
+     "404": {
+      "description": "Meeting not found"
+     }
+    }
+   }
+  },
+  "/meeting/delete-comment": {
+   "delete": {
+    "tags": [
+     "meeting"
+    ],
+    "summary": "Deletes the comment associated with the meeting",
+    "operationId": "deleteComment",
+    "produces": [
+     "application/json"
+    ],
+    "parameters": [
+     {
+      "in": "body",
+      "name": "body",
+      "description": "Parameters for deleting a comment in the meeting",
+      "required": true,
+      "schema": {
+       "$ref": "#/definitions/DeleteComment"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successfully deleted the comment"
+     },
+     "400": {
+      "description": "Bad Request - invalid params"
+     },
+     "404": {
+      "description": "Meeting not found"
+     }
+    }
+   }
+  }
+ },
+ "securityDefinitions": {
+  "cookiehour_auth": {
+   "type": "oauth2",
+   "authorizationUrl": "",
+   "flow": "implicit",
+   "scopes": {
+    "write:users": "modify user information",
+    "read:users": "read user information"
+   }
+  },
+  "api_key": {
+   "type": "apiKey",
+   "name": "api_key",
+   "in": "header"
+  }
+ },
+ "definitions": {
+  "User": {
+   "type": "string",
+   "example": "student"
+  },
+  "Login": {
+   "type": "object",
+   "properties": {
+    "username": {
+     "type": "string",
+     "example": "willisj2"
+    },
+    "password": {
+     "type": "string",
+     "example": "684c478a98b43f"
+    }
+   }
+  },
+  "LoginResponse": {
+   "type": "object",
+   "properties": {
+    "status": {
+     "properties": {
+      "type": {
+       "type": "string",
+       "example": "success"
+      },
+      "message": {
+       "type": "string",
+       "example": "Success"
+      },
+      "code": {
+       "type": "integer",
+       "format": "int32",
+       "example": "200"
+      },
+      "error": {
+       "type": "string",
+       "example": "false"
+      }
+     }
+    },
+    "data": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/LoginData"
+     }
+    }
+   }
+  },
+  "LoginData": {
+   "properties": {
+    "status": {
+     "type": "string",
+     "example": "Authenticated"
+    },
+    "user": {
+     "properties": {
+      "id": {
+       "type": "integer",
+       "format": "int64",
+       "description": "User ID",
+       "example": "1007392124"
+      },
+      "firstName": {
+       "type": "string",
+       "example": "Julian"
+      },
+      "lastName": {
+       "type": "string",
+       "example": "Willis"
+      },
+      "email": {
+       "type": "string",
+       "example": "julian.willis@gmail.com"
+      },
+      "phone": {
+       "type": "string",
+       "example": "(406)-524-7001"
+      }
+     }
+    },
+    "expires_at": {
+     "format": "string",
+     "example": "2019/04/21 05:56:21 +0000"
+    },
+    "session_token": {
+     "format": "string",
+     "example": "9x8869x31134x7906x6x54474x21x18xxx90857x"
+    }
+   }
+  },
+  "CourseCreate": {
+   "type": "object",
+   "properties": {
+    "courseCode": {
+     "type": "string",
+     "example": "CSC302"
+    },
+    "name": {
+     "type": "string",
+     "example": "Eng Lrg Soft Sys"
+    },
+    "session": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/sessionData"
+     }
+    },
+    "taughtBy": {
+     "type": "string",
+     "example": "matt@email.com"
+    },
+    "numStudents": {
+     "type": "integer",
+     "format": "int32",
+     "example": "40"
+    },
+    "file": {
+     "type": "string",
+     "example": "classList.txt"
+    }
+   }
+  },
+  "CourseData": {
+   "type": "object",
+   "properties": {
+    "courseCode": {
+     "type": "string",
+     "example": "CSC302"
+    },
+    "name": {
+     "type": "string",
+     "example": "Eng Lrg Soft Sys"
+    },
+    "session": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/sessionData"
+     }
+    },
+    "taughtBy": {
+     "type": "string",
+     "example": "matt@email.com"
+    },
+    "numStudents": {
+     "type": "integer",
+     "format": "int32",
+     "example": "40"
+    },
+    "studentsEnrolled": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/studentData"
+     }
+    }
+   }
+  },
+  "sessionData": {
+   "properties": {
+    "year": {
+     "type": "string",
+     "example": "2019"
+    },
+    "semester": {
+     "format": "string",
+     "example": "Fall"
+    }
+   }
+  },
+  "studentData": {
+   "properties": {
+    "studentEmail": {
+     "type": "string",
+     "example": "student1@email.com"
+    }
+   }
+  },
+  "OHCreate": {
+   "type": "object",
+   "properties": {
+    "heldBy": {
+     "type": "string",
+     "example": "matt@email.com"
+    },
+    "startTime": {
+     "type": "string",
+     "example": "13:00"
+    },
+    "endTime": {
+     "type": "string",
+     "example": "14:00"
+    },
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "courseName": {
+     "type": "string",
+     "example": "CSC302"
+    },
+    "lengthOfBookings": {
+     "type": "integer",
+     "format": "int32",
+     "example": "15"
+    }
+   }
+  },
+  "OHData": {
+   "type": "object",
+   "properties": {
+    "heldBy": {
+     "type": "string",
+     "example": "matt@email.com"
+    },
+    "startTime": {
+     "type": "string",
+     "example": "13:00"
+    },
+    "endTime": {
+     "type": "string",
+     "example": "14:00"
+    },
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "courseName": {
+     "type": "string",
+     "example": "CSC302"
+    },
+    "lengthOfBookings": {
+     "type": "integer",
+     "format": "int32",
+     "example": "15"
+    },
+    "booking": {
+     "type": "array",
+     "items": {
+      "$ref": "#/definitions/bookingData"
+     }
+    }
+   }
+  },
+  "deleteOH": {
+   "type": "object",
+   "properties": {
+    "heldBy": {
+     "type": "string",
+     "example": "matt@email.com"
+    },
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "time": {
+     "type": "string",
+     "example": "15:00"
+    },
+    "courseName": {
+     "type": "string",
+     "example": "CSC302"
+    }
+   }
+  },
+  "bookingData": {
+   "properties": {
+    "time": {
+     "type": "string",
+     "example": "13:15"
+    },
+    "studentEmail": {
+     "type": "string",
+     "example": "student1@email.com"
+    }
+   }
+  },
+  "MeetingCreate": {
+   "type": "object",
+   "properties": {
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "startTime": {
+     "type": "string",
+     "example": "13:00"
+    },
+    "studentEmail": {
+     "type": "string",
+     "example": "student1@email.com"
+    },
+    "heldBy": {
+     "type": "string",
+     "example": "matt@email.com"
+    },
+    "agenda": {
+     "type": "string",
+     "example": "confused abt A2"
+    },
+    "courseName": {
+     "type": "string",
+     "example": "CSC302"
+    }
+   }
+  },
+  "MeetingData": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "integer",
+     "format": "int32",
+     "example": "124943593242"
+    },
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "startTime": {
+     "type": "string",
+     "example": "13:00"
+    },
+    "studentEmail": {
+     "type": "string",
+     "example": "student1@email.com"
+    },
+    "heldBy": {
+     "type": "string",
+     "example": "matt@email.com"
+    },
+    "agenda": {
+     "type": "string",
+     "example": "confused abt A2"
+    },
+    "courseName": {
+     "type": "string",
+     "example": "CSC302"
+    },
+    "comment": {
+     "type": "string",
+     "example": "some comment here"
+    },
+    "note": {
+     "type": "string",
+     "example": "secret note for me"
+    }
+   }
+  },
+  "AgendaEdit": {
+   "type": "object",
+   "properties": {
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "startTime": {
+     "type": "string",
+     "example": "13:00"
+    },
+    "agenda": {
+     "type": "string",
+     "example": "confused abt A3"
+    }
+   }
+  },
+  "CommentEdit": {
+   "type": "object",
+   "properties": {
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "startTime": {
+     "type": "string",
+     "example": "13:00"
+    },
+    "comment": {
+     "type": "string",
+     "example": "thanks for the help!"
+    }
+   }
+  },
+  "NoteEdit": {
+   "type": "object",
+   "properties": {
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "startTime": {
+     "type": "string",
+     "example": "13:00"
+    },
+    "note": {
+     "type": "string",
+     "example": "secret note for myself"
+    }
+   }
+  },
+  "DeleteComment": {
+   "type": "object",
+   "properties": {
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "startTime": {
+     "type": "string",
+     "example": "13:00"
+    },
+    "studentEmail": {
+     "type": "string",
+     "example": "student@email.com"
+    },
+    "teacherEmail": {
+     "type": "string",
+     "example": "matt@email.com"
+    }
+   }
+  },
+  "TimeEdit": {
+   "type": "object",
+   "properties": {
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "startTime": {
+     "type": "string",
+     "example": "13:00"
+    }
+   }
+  },
+  "DateEdit": {
+   "type": "object",
+   "properties": {
+    "date": {
+     "type": "string",
+     "example": "22/03/2019"
+    },
+    "startTime": {
+     "type": "string",
+     "example": "13:00"
+    }
+   }
+  }
+ },
+ "externalDocs": {
+  "description": "Find out more about Swagger",
+  "url": "http://swagger.io"
+ }
+}
